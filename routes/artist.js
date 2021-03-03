@@ -3,6 +3,8 @@ const router = new express.Router();
 const ArtistModel = require("./../model/Artist");
 const uploader = require("./../config/cloudinary");
 const protectAdminRoute = require("./../middlewares/protectAdminRoute")
+const protectRoute = require("./../middlewares/protectRoute");
+
 
 // router.use(protectAdminRoute);
 

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const protectRoute = require("./../middlewares/protectRoute");
 
 const ArtistModel = require("./../model/Artist");
 const AlbumModel = require("./../model/Album");
@@ -27,7 +28,7 @@ router.get("/", async (req, res, next) => {
 
 /* GET dashboard page  */
 
-router.get("/dashboard", async (req, res, next) => {
+router.get("/dashboard",  async (req, res, next) => {
   try {
     const dbRes = await Promise.all([
       ArtistModel.find(),
@@ -45,7 +46,7 @@ router.get("/dashboard", async (req, res, next) => {
   }
 });
 
-router.get("/artist", async (req, res, next) => {
+router.get("/artist", protectRoute, async (req, res, next) => {
   try {
     res.render("artists", {
       artists: await ArtistModel.find().populate("style"),
@@ -55,7 +56,7 @@ router.get("/artist", async (req, res, next) => {
   }
 });
 
-router.get("/album", async (req, res, next) => {
+router.get("/album", protectRoute, async (req, res, next) => {
   try {
     res.render("albums", {
       albums: await AlbumModel.find().populate("artist label"),
@@ -65,7 +66,7 @@ router.get("/album", async (req, res, next) => {
   }
 });
 
-router.get("/albums/:id", async (req, res, next) => {
+router.get("/albums/:id", protectRoute, async (req, res, next) => {
   try {
     res.render(
       "album",
@@ -76,7 +77,7 @@ router.get("/albums/:id", async (req, res, next) => {
   }
 });
 
-router.get("/search", async (req, res, next) => {
+router.get("/search", protectRoute, async (req, res, next) => {
   // req.body (posted infos)
   // req.params (variable/dynamique part of a route path)
   // req.query (access infos from for with get method)
@@ -97,6 +98,10 @@ router.get("/search", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+router.get("/profile", protectRoute, function (req, res) {
+  res.render("profile");
 });
 
 module.exports = router; // MANDATORY
